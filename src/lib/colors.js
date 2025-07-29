@@ -1,0 +1,67 @@
+const Colors = {
+  background: {
+    default: "bg-white",
+    blue: "bg-blue-100",
+    blueDark: "bg-blue-600",
+    red: "bg-red-100",
+    red1: "bg-red-200",
+    red2: "bg-red-500",
+    redDark: "bg-red-600",
+    gray: "bg-gray-200",
+    grayDark: "bg-gray-500",
+  },
+  text: {
+    default: "text-slate-600",
+    danger: "text-red-500",
+    white: "text-white",
+    gray: "text-gray-500",
+    grayLight: "text-gray-400",
+    grayLight1: "text-gray-300",
+    blue: "text-blue-500",
+    blueDark: "text-blue-600",
+  }, 
+  hover: {
+    blue: "hover:bg-blue-50",
+    blueDark: "hover:bg-blue-100",
+    blueDark1: "hover:bg-blue-500",
+    textBlue: "hover:text-blue-200",
+    textBlueDark: "hover:text-blue-500",
+    red: "hover:bg-red-100",
+    gray: "hover:bg-gray-200",
+    borderBlue: "hover:border-blue-500",
+    borderRed: "hover:border-red-500",
+    borderGray: "hover:border-gray-300",
+    bgWhite: "hover:bg-white",
+    opacity: "hover:opacity-50",
+  },
+  active: {
+    blue: "active:bg-blue-100",
+    textBlue: "active:text-blue-200",
+    textBlueDark: "active:text-blue-500",
+    blueDark: "active:bg-blue-300",
+    red: "active:bg-red-200",
+    gray: "active:bg-gray-200",
+    borderBlue: "active:border-blue-500",
+    borderRed: "active:border-red-500",
+    opacity: "active:opacity-50",
+    bgWhite: "active:bg-white",
+    borderGray: "active:border-gray-300",
+    underline: "active:underline",
+  },
+  group_active: {
+    blue: "group-active:text-blue-600",
+    red: "group-active:text-red-600",
+  },
+  border: {
+    gray: "border-gray-200",
+    blue: "border-blue-200",
+    red: "border-red-200",
+    white: "border-white",
+  },
+  font : {
+    default: "font-jockey-one",
+    secondary: "font-baloo-bhaijaan-2",
+  }
+};
+
+export default Colors;

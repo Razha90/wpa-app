@@ -1,14 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Jockey_One, Baloo_Bhaijaan_2 } from "next/font/google";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jockeyOne = Jockey_One({
+  variable: "--font-jockey-one",
   subsets: ["latin"],
+  weight: "400",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const balooBhaijaan2 = Baloo_Bhaijaan_2({
+  variable: "--font-baloo-bhaijaan-2",
   subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata = {
@@ -18,11 +21,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="id">
+      <body className={`${balooBhaijaan2.variable} ${jockeyOne.variable} !font-baloo-bhaijaan-2 antialiased`}>
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );
