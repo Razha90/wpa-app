@@ -118,7 +118,8 @@ export default function Client({ user }) {
     const value = e.target.value;
     if (!/^\d*$/.test(value)) return;
     if (value.length === 1 && index < 5) {
-      inputRefs[index + 1].current.focus();
+      console.log(inputRefs.current);
+      inputRefs.current[index + 1].current.focus();
     }
   };
 
@@ -217,42 +218,41 @@ export default function Client({ user }) {
 
           <form onSubmit={getPinValue} className="max-w-sm mx-auto mt-15">
             <div className="flex mb-2 space-x-2 rtl:space-x-reverse justify-center">
-              {inputRefs.current.length > 0 &&
-                inputRefs.current.map((ref, index) => (
-                  <div key={index}>
-                    <label htmlFor={`code-${index}`} className="sr-only">
-                      First code
-                    </label>
-                    <input
-                      ref={ref}
-                      inputMode="numeric"
-                      onChange={(e) => handleChange(e, index)}
-                      onKeyDown={(e) => {
-                        const allowedKeys = [
-                          "Backspace",
-                          "ArrowLeft",
-                          "ArrowRight",
-                          "Tab",
-                          "Delete",
-                        ];
-                        if (
-                          !/^[0-9]$/.test(e.key) &&
-                          !allowedKeys.includes(e.key)
-                        ) {
-                          e.preventDefault();
-                        }
-                        handleKeyDown(e, index);
-                      }}
-                      type="text"
-                      maxLength="1"
-                      id={`code-${index}`}
-                      className={`block w-15 h-15 py-5 text-5xl  font-extrabold text-center text-blue-600 bg-white border rounded-lg focus:ring-blue-300 focus:border-blue-300 ${
-                        wrongPin ? "border-red-500" : "border-gray-300"
-                      }`}
-                      required
-                    />
-                  </div>
-                ))}
+              {inputRefs.current.map((ref, index) => (
+                <div key={index}>
+                  <label htmlFor={`code-${index}`} className="sr-only">
+                    First code
+                  </label>
+                  <input
+                    ref={ref}
+                    inputMode="numeric"
+                    onChange={(e) => handleChange(e, index)}
+                    onKeyDown={(e) => {
+                      const allowedKeys = [
+                        "Backspace",
+                        "ArrowLeft",
+                        "ArrowRight",
+                        "Tab",
+                        "Delete",
+                      ];
+                      if (
+                        !/^[0-9]$/.test(e.key) &&
+                        !allowedKeys.includes(e.key)
+                      ) {
+                        e.preventDefault();
+                      }
+                      handleKeyDown(e, index);
+                    }}
+                    type="text"
+                    maxLength="1"
+                    id={`code-${index}`}
+                    className={`block w-15 h-15 py-5 text-5xl  font-extrabold text-center text-blue-600 bg-white border rounded-lg focus:ring-blue-300 focus:border-blue-300 ${
+                      wrongPin ? "border-red-500" : "border-gray-300"
+                    }`}
+                    required
+                  />
+                </div>
+              ))}
             </div>
             {wrongPin && (
               <p
