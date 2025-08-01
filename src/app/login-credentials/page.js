@@ -1,4 +1,3 @@
-import { SignIn } from "../components/sign-in";
 import { auth } from "@/auth";
 
 export default async function Home() {
@@ -11,7 +10,6 @@ export default async function Home() {
   )
   return (
     <div>
-      <SignIn />
     </div>
   )
 }
