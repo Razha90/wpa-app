@@ -15,12 +15,15 @@
     "@react-spring/web": "^10.0.1",
     "@simplewebauthn/browser": "^9.0.1",
     "@simplewebauthn/server": "^9.0.3",
+    "bcryptjs": "^3.0.2",
     "framer-motion": "^12.23.9",
     "next": "15.4.3",
     "next-auth": "^5.0.0-beta.29",
+    "nodemailer": "^6.10.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "tailwindcss-animated": "^2.0.0"
+    "tailwindcss-animated": "^2.0.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

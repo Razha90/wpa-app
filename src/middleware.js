@@ -6,32 +6,79 @@ import { NextResponse } from "next/server";
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  const publicPaths = ["/login", "/register", "/term", "/condition"];
-  const isPublic = publicPaths.includes(pathname);
+  // const publicPaths = ["/login", "/register", "/term", "/condition", "/contact"];
+  // const isPublic = publicPaths.includes(pathname);
+
+  // const session = await auth();
+
+  // if (isPublic && !session) {
+  //   return NextResponse.next();
+  // }
+
+  // if (isPublic && session) {
+  //   return NextResponse.redirect(new URL("/", request.url));
+  // }
+
+  // if (!isPublic && !session) {
+  //   const loginUrl = new URL("/login", request.url);
+  //   loginUrl.searchParams.set("redirect", pathname); // biar bisa kembali setelah login
+  //   return NextResponse.redirect(loginUrl);
+  // }
+
+  const justLogin = ["/", "/profile"];
+  const stopLogin = ["/login", "/register"];
+  const verifyLogin = ["/verify-token"];
 
   const session = await auth();
+  // console.log("session", session);
 
-  // Jika halaman publik dan tidak ada session: lanjutkan
-  if (isPublic && !session) {
+  const isJustLogin = justLogin.includes(pathname);
+  const isStopLogin = stopLogin.includes(pathname);
+  const isVerifyLogin = verifyLogin.includes(pathname);
+
+  if (isJustLogin && session && session.user.emailVerified) {
     return NextResponse.next();
   }
 
-  // Jika halaman publik tapi sudah login: redirect ke halaman utama
-  if (isPublic && session) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  // Jika halaman private tapi belum login: redirect ke login
-  if (!isPublic && !session) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname); // biar bisa kembali setelah login
+  if (verifyLogin && session && session.user.emailVerified) {
+    const loginUrl = new URL("/", request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Jika halaman private dan sudah login: lanjutkan
-  return NextResponse.next();
+  if (isJustLogin && session && !session.user.emailVerified) {
+    const loginUrl = new URL("/verify-token", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (isVerifyLogin && session && !session.user.emailVerified) {
+    return NextResponse.next();
+  }
+
+  if (isStopLogin && !session) {
+    return NextResponse.next();
+  }
+
+  if (isStopLogin && session) {
+    const loginUrl = new URL("/", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // console.log('dibawah', `${isJustLogin} ${isStopLogin} ${session}`);
+  const loginUrl = new URL("/login", request.url);
+  // loginUrl.searchParams.set("redirect", pathname); // biar bisa kembali setelah login
+  return NextResponse.redirect(loginUrl);
 }
 
+// export const config = {
+//   matcher: ["/((?!_next/static|_next/image|favicon.ico|api|.well-known).*)"],
+// };
+
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api|.well-known).*)"],
+  matcher: ["/profile", "/", "/login", "/register", "/verify-token"],
 };
+
+// export const config = {
+//   matcher: [
+//     "/((?!_next/static|_next/image|favicon.ico|api|.well-known|.*\\.(gif|png|jpg|jpeg|svg|webp)).*)",
+//   ],
+// };

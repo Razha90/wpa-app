@@ -1,13 +1,11 @@
-import { Header } from "./components/header";
-import Footer from "./components/footer";
+import Client from "./client";
 
 export default function Home() {
-
+  
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <Footer />
-    </div>
+    <>
+      <Client />
+    </>
   );
 }
 

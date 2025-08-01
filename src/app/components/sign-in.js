@@ -6,14 +6,36 @@ import CloseEye from "./icons/close_eye";
 import OpenEye from "./icons/open_eye";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function SignIn() {
-  const credentialsAction = (formData) => {
-    signIn("credentials", formData);
+export default function SignIn({ loading, stopLoading, alert }) {
+  const router = useRouter();
+  const credentialsAction = async (e) => {
+    e.preventDefault();
+    loading?.();
+    
+    const form = e.currentTarget;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result.url) {
+      router.push("/");
+    } else {
+      stopLoading?.();
+      alert?.();
+    }
+
+
   };
   const [security, setSecurity] = useState(false);
   return (
-    <form action={credentialsAction} className="mt-15 max-w-md mx-auto">
+    <form onSubmit={credentialsAction} className="mt-15 max-w-md mx-auto">
       <div className="flex flex-col animate-fade-down animate-delay-300">
         <div className={`flex flex-row items-center gap-x-2`}>
           <div className={`w-8 h-8 ${Colors.text.grayLight}`}>

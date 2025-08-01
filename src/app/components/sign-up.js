@@ -7,73 +7,101 @@ import { useState } from "react";
 import Link from "next/link";
 import Avatar from "./icons/avatar";
 import Phone from "./icons/phone";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function SignUp() {
-  const [checkFullname, setCheckFullname] = useState("");
-  const [checkEmail, setCheckEmail] = useState("");
-  const [checkPhone, setCheckPhone] = useState("");
-  const [errorPassword, setErrorPassword] = useState("");
-  const [checkTermsAccepted, setCheckTermsAccepted] = useState("");
+export default function SignUp({
+  returnError,
+  loading,
+  stopLoading,
+  loginShow,
+}) {
+  const [isCheckFullname, setCheckFullname] = useState("");
+  const [isCheckEmail, setCheckEmail] = useState("");
+  const [isCheckPhone, setCheckPhone] = useState("");
+  const [isErrorPassword, setErrorPassword] = useState("");
+  let checkFullname = "";
+  let checkEmail = "";
+  let checkPhone = "";
+  let errorPassword = "";
+  let checkTermsAccepted = "";
+  // const [checkTermsAccepted, setCheckTermsAccepted] = useState("");
+  const router = useRouter();
+  const credentialsAction = async (e) => {
+    e.preventDefault();
 
-  const credentialsAction = async (formData) => {
+    const formData = new FormData(e.target);
     const fullname = formData.get("fullname");
     const email = formData.get("email");
     const phone = formData.get("phone");
     const password = formData.get("password");
     const checkPassword = formData.get("check-password");
     const termsAccepted = formData.get("terms-accepted");
+    if (
+      checkEmail ||
+      checkFullname ||
+      checkPhone ||
+      errorPassword ||
+      termsAccepted !== "on"
+    ) {
+      returnError("Silakan perbaiki kesalahan sebelum melanjutkan.");
+    }
+
+    loading?.();
+    checkTermsAccepted = "";
 
     if (!fullname || fullname.length < 5) {
       setCheckFullname("Nama lengkap harus diisi dan minimal 5 karakter.");
+      checkFullname = "Nama lengkap harus diisi dan minimal 5 karakter.";
     }
 
     if (fullname.trim() !== fullname) {
       setCheckFullname("Nama tidak boleh diawali atau diakhiri dengan spasi.");
-      return;
+      checkFullname = "Nama tidak boleh diawali atau diakhiri dengan spasi.";
     }
 
     if (phone && phone.length < 8) {
       setCheckPhone("Nomor telepon harus diisi dan minimal 8 digit.");
+      checkPhone = "Nomor telepon harus diisi dan minimal 8 digit.";
     }
 
     if (phone.trim() !== phone) {
       setCheckPhone(
         "Nomor phone tidak boleh diawali atau diakhiri dengan spasi."
       );
-      return;
+      checkPhone =
+        "Nomor phone tidak boleh diawali atau diakhiri dengan spasi.";
     }
 
     if (!email || !email.includes("@")) {
       setCheckEmail("Email harus diisi dengan format yang benar.");
+      checkEmail = "Email harus diisi dengan format yang benar.";
     }
 
     if (email.trim() !== email) {
       setCheckEmail("Email tidak boleh diawali atau diakhiri dengan spasi.");
+      checkEmail = "Email tidak boleh diawali atau diakhiri dengan spasi.";
     }
 
     if (email.includes(" ")) {
       setCheckEmail("Email tidak boleh mengandung spasi.");
+      checkEmail = "Email tidak boleh mengandung spasi.";
     }
 
     if (!password || password.length < 8) {
       setErrorPassword("Password harus diisi dan minimal 8 karakter.");
+      errorPassword = "Password harus diisi dan minimal 8 karakter.";
     }
 
     if (password != checkPassword) {
       setErrorPassword("Password tidak cocok.");
+      errorPassword = "Password tidak cocok.";
     }
 
     if (termsAccepted !== "on") {
       setCheckTermsAccepted("Anda harus menyetujui syarat dan ketentuan.");
+      checkTermsAccepted = "Anda harus menyetujui syarat dan ketentuan.";
     }
-
-    console.log("All Error", {
-      checkFullname,
-      checkEmail,
-      checkPhone,
-      errorPassword,
-      checkTermsAccepted,
-    });
 
     if (
       !checkFullname &&
@@ -82,7 +110,7 @@ export default function SignUp() {
       !errorPassword &&
       !checkTermsAccepted
     ) {
-      fetch("/api/register", {
+      await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,26 +120,71 @@ export default function SignUp() {
           email,
           phone,
           password,
+          passwordConfirm: checkPassword,
           termsAccepted,
         }),
       })
-        .then((data) => {
-          console.log("data:", data);
+        .then(async (res) => {
+          const data = await res.json();
+          console.log(data);
+
+          if (!res.ok) {
+            if (data.errors.fullname) {
+              setCheckFullname(data.errors.fullname);
+              checkFullname = data.errors.fullname;
+            }
+            if (data.errors.email) {
+              setCheckEmail(data.errors.email);
+              checkEmail = data.errors.email;
+            }
+
+            if (data.errors.phone) {
+              setCheckPhone(data.errors.phone);
+              checkPhone = data.errors.phone;
+            }
+
+            if (data.errors.password) {
+              setErrorPassword(data.errors.password);
+              errorPassword = data.errors.password;
+            }
+
+            if (data.errors.server) {
+              returnError(data.errors.server);
+            }
+          } else {
+            stopLoading?.();
+            loginShow?.();
+            signIn("credentials", {
+              redirect: false,
+              email: data.email,
+              password: data.password,
+            }).then((response) => {
+              if (response.ok) {
+                router.push("/verify-token");
+              } else {
+                returnError("Login gagal, silakan coba lagi.");
+                setTimeout(() => {
+                  router.push("/login");
+                }, 2000);
+              }
+            });
+          }
         })
         .catch((error) => {
           console.error("dibawah:", error);
         });
-      return;
     }
+
+    stopLoading?.();
   };
   const [security, setSecurity] = useState(false);
   return (
-    <form action={credentialsAction} className="mt-15 max-w-md mx-auto">
+    <form onSubmit={credentialsAction} className="mt-15 max-w-md mx-auto">
       <div className="flex flex-col animate-fade-down animate-delay-300">
         <div className={`flex flex-row items-center gap-x-2`}>
           <div
             className={`w-7 h-7 ${
-              checkFullname ? Colors.text.danger : Colors.text.grayLight
+              isCheckFullname ? Colors.text.danger : Colors.text.grayLight
             }`}
           >
             <Avatar />
@@ -127,6 +200,7 @@ export default function SignUp() {
                 .replace(/[^a-zA-Z\s]/g, "")
                 .slice(0, 50);
               if (checkFullname) setCheckFullname("");
+              if (checkFullname) checkFullname = "";
             }}
             className={`!text-gray-500 w-full ${Colors.text.default} border-none focus:outline-none focus:border-blue-500 focus:ring-0 placeholder:text-gray-400 ${Colors.font.secondary} text-xl`}
             placeholder="Nama Lengkap"
@@ -134,12 +208,12 @@ export default function SignUp() {
         </div>
         <div
           className={`h-[3px] rounded-full w-full ${
-            checkFullname ? Colors.background.red2 : Colors.background.gray
+            isCheckFullname ? Colors.background.red2 : Colors.background.gray
           } mt-1`}
         ></div>
-        {checkFullname && (
+        {isCheckFullname && (
           <p className={`${Colors.text.danger} text-sm italic animate-fade`}>
-            {checkFullname}
+            {isCheckFullname}
           </p>
         )}
       </div>
@@ -148,7 +222,7 @@ export default function SignUp() {
         <div className={`flex flex-row items-center gap-x-2`}>
           <div
             className={`w-8 h-8 ${
-              checkEmail ? Colors.text.danger : Colors.text.grayLight
+              isCheckEmail ? Colors.text.danger : Colors.text.grayLight
             }`}
           >
             <Email />
@@ -161,6 +235,7 @@ export default function SignUp() {
             name="email"
             onInput={(e) => {
               if (checkEmail) setCheckEmail("");
+              if (checkEmail) checkEmail = "";
             }}
             className={`!text-gray-500 w-full ${Colors.text.default} border-none focus:outline-none focus:border-blue-500 focus:ring-0 placeholder:text-gray-400 ${Colors.font.secondary} text-xl`}
             placeholder="Alamat Email"
@@ -168,12 +243,12 @@ export default function SignUp() {
         </div>
         <div
           className={`h-[3px] rounded-full w-full ${
-            checkEmail ? Colors.background.red2 : Colors.background.gray
+            isCheckEmail ? Colors.background.red2 : Colors.background.gray
           } mt-1`}
         ></div>
-        {checkEmail && (
+        {isCheckEmail && (
           <p className={`${Colors.text.danger} text-sm italic animate-fade`}>
-            {checkEmail}
+            {isCheckEmail}
           </p>
         )}
       </div>
@@ -182,7 +257,7 @@ export default function SignUp() {
         <div className={`flex flex-row items-center gap-x-2`}>
           <div
             className={`w-8 h-8 ${
-              checkPhone ? Colors.text.danger : Colors.text.grayLight
+              isCheckPhone ? Colors.text.danger : Colors.text.grayLight
             }`}
           >
             <Phone />
@@ -208,6 +283,7 @@ export default function SignUp() {
               e.target.value = value.slice(0, 13); // Batasi maksimal 13 digit
 
               if (checkPhone) setCheckPhone("");
+              if (checkPhone) checkPhone = "";
             }}
             className={`!text-gray-500 w-full ${Colors.text.default} border-none focus:outline-none focus:border-blue-500 focus:ring-0 placeholder:text-gray-400 ${Colors.font.secondary} text-xl`}
             placeholder="83424243"
@@ -215,12 +291,12 @@ export default function SignUp() {
         </div>
         <div
           className={`h-[3px] rounded-full w-full ${
-            checkPhone ? Colors.background.red2 : Colors.background.gray
+            isCheckPhone ? Colors.background.red2 : Colors.background.gray
           } mt-1`}
         ></div>
-        {checkPhone && (
+        {isCheckPhone && (
           <p className={`${Colors.text.danger} text-sm italic animate-fade`}>
-            {checkPhone}
+            {isCheckPhone}
           </p>
         )}
       </div>
@@ -229,7 +305,7 @@ export default function SignUp() {
         <div className={`flex flex-row items-center gap-x-2`}>
           <div
             className={`w-8 h-8 ${
-              errorPassword ? Colors.text.danger : Colors.text.grayLight
+              isErrorPassword ? Colors.text.danger : Colors.text.grayLight
             }`}
           >
             <Padlock />
@@ -242,6 +318,7 @@ export default function SignUp() {
             required
             onInput={(e) => {
               if (errorPassword) setErrorPassword("");
+              if (errorPassword) errorPassword = "";
             }}
             className={`w-full !text-gray-500 border-none focus:outline-none focus:border-blue-500 focus:ring-0 placeholder:text-gray-400 ${Colors.font.secondary} text-xl`}
             placeholder="Password"
@@ -255,12 +332,12 @@ export default function SignUp() {
         </div>
         <div
           className={`h-[3px] rounded-full w-full ${
-            errorPassword ? Colors.background.red2 : Colors.background.gray
+            isErrorPassword ? Colors.background.red2 : Colors.background.gray
           } mt-1`}
         ></div>
-        {errorPassword && (
+        {isErrorPassword && (
           <p className={`${Colors.text.danger} text-sm italic animate-fade`}>
-            {errorPassword}
+            {isErrorPassword}
           </p>
         )}
       </div>
@@ -272,7 +349,7 @@ export default function SignUp() {
         <div className={`flex flex-row items-center gap-x-2`}>
           <div
             className={`w-7 h-7 ${
-              errorPassword ? Colors.text.danger : Colors.text.grayLight
+              isErrorPassword ? Colors.text.danger : Colors.text.grayLight
             }`}
           >
             <CloseEye />
@@ -289,12 +366,12 @@ export default function SignUp() {
         </div>
         <div
           className={`h-[3px] rounded-full w-full ${
-            errorPassword ? Colors.background.red2 : Colors.background.gray
+            isErrorPassword ? Colors.background.red2 : Colors.background.gray
           } mt-1`}
         ></div>
-        {errorPassword && (
+        {isErrorPassword && (
           <p className={`${Colors.text.danger} text-sm italic animate-fade`}>
-            {errorPassword}
+            {isErrorPassword}
           </p>
         )}
       </div>
@@ -318,13 +395,6 @@ export default function SignUp() {
           </Link>
           .
         </p>
-        {checkTermsAccepted && (
-          <p
-            className={`${Colors.text.danger} text-sm italic animate-fade mt-10`}
-          >
-            {checkTermsAccepted}
-          </p>
-        )}
       </div>
 
       <div className="flex justify-center w-full mt-25 animate-fade-down animate-delay-900">

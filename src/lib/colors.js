@@ -19,6 +19,7 @@ const Colors = {
     grayLight1: "text-gray-300",
     blue: "text-blue-500",
     blueDark: "text-blue-600",
+    green: "text-green-500",
   }, 
   hover: {
     blue: "hover:bg-blue-50",

@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,30 +14,26 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  username      String?         @unique
-  email         String?         @unique
+  id            String    @id @default(cuid())
+  fullname      String
+  email         String    @unique
+  password      String
   emailVerified DateTime?
   image         String?
-  phone         String?         @unique
+  phone         String    @unique
   phoneVerified DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  VerificationToken VerificationToken[]
+  VerificationToken VerificationToken?
 }
 
 model VerificationToken {
-  id              String   @id @default(cuid())
-  identifier      String
-  token           String
-  expires         DateTime
-  userId          String
+  id        String   @id @default(cuid())
+  token     Int      @unique
+  expiredAt DateTime
+  userId    String   @unique
 
-  user            User     @relation(fields: [userId], references: [id])
-
-  @@unique([identifier, token])
+  user User @relation(fields: [userId], references: [id])
 }
-
