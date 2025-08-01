@@ -2,7 +2,7 @@
 
 import Colors from "@/lib/colors";
 import Email from "../components/icons/email";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Arrow from "../components/icons/arrow";
 import { BlackScreen } from "../components/black_screen";
 import Loading from "../components/loading";
@@ -12,7 +12,6 @@ import CooldownTimer from "../components/cooldown_timer";
 import { signOut, useSession } from "next-auth/react";
 import CompleteVerification from "../components/complete_verification";
 import { useRouter } from "next/navigation";
-
 
 export default function Client({ user }) {
   const [expired, setExpired] = useState(false);
@@ -28,7 +27,7 @@ export default function Client({ user }) {
     await update({ updated: true });
   };
 
-  const checkTokenExpiration = async () => {
+  const checkTokenExpiration = useCallback(async () => {
     setLoading(false);
     try {
       const response = await fetch("/api/check-verify", {
@@ -61,11 +60,11 @@ export default function Client({ user }) {
     } finally {
       setLoading(true);
     }
-  };
+  }, [user.user.email]);
 
   useEffect(() => {
     checkTokenExpiration();
-  }, []);
+  }, [checkTokenExpiration]);
 
   const makeTokenAgain = async () => {
     if (!expired) return;
@@ -106,8 +105,12 @@ export default function Client({ user }) {
       setLoading(true);
     }
   };
+  const inputRefs = useRef([]);
 
-  const inputRefs = Array.from({ length: 6 }, () => useRef());
+  useEffect(() => {
+    inputRefs.current = Array.from({ length: 6 }, () => React.createRef());
+  }, []);
+
   const handleChange = (e, index) => {
     setWrongPin(false);
     const value = e.target.value;
@@ -151,7 +154,6 @@ export default function Client({ user }) {
       const result = await response.json();
       console.log("Response from validation-token:", result);
       if (response.ok) {
-
         setSuccess(true);
         refreshSession();
         setTimeout(() => {

@@ -26,7 +26,7 @@ export default function CooldownTimer({ starttimer, stopped }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [stopped]);
 
   const minutes = Math.floor(remainingTime / 60000);
   const seconds = Math.floor((remainingTime % 60000) / 1000);

@@ -1,3 +1,5 @@
+"use client";
+
 import Email from "./icons/email";
 import Colors from "@/lib/colors";
 import Padlock from "./icons/padlock";

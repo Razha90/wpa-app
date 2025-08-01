@@ -1,15 +1,18 @@
 import Info from "./icons/info";
 import Close2 from "./icons/close2";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Link from "next/link";
 
 export default function AlertDanger({
   message = "Something went wrong. Please try again.",
   closed,
 }) {
-  const handleClosed = () => {
+  // const handleClosed = () => {
+  //   closed?.();
+  // };
+  const handleClosed = useCallback(() => {
     closed?.();
-  };
+  }, [closed]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -17,7 +20,7 @@ export default function AlertDanger({
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [handleClosed]);
   return (
     <>
       <div

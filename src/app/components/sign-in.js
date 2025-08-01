@@ -1,3 +1,5 @@
+"use client"
+
 import { signIn } from "next-auth/react";
 import Email from "./icons/email";
 import Colors from "@/lib/colors";

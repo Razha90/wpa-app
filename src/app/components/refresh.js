@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import Colors from "@/lib/colors";
 import { signOut } from "next-auth/react"
