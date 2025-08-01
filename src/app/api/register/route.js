@@ -115,7 +115,6 @@ export async function POST(request) {
     await SendOtp({ email, name: user.fullname, otp: token });
   } catch (err) {
     console.log("Error creating user:", err);
-    // logger.error("Error creating user:", err);
     errors.server = "Terjadi kesalahan saat membuat pengguna.";
     return new Response(JSON.stringify({ errors }), {
       status: 500,

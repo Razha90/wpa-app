@@ -1,4 +1,3 @@
-import logger from "./logger";
 import prisma from "./prisma";
 
 export default async function GenerateOtp() {
@@ -14,10 +13,8 @@ export default async function GenerateOtp() {
       exists = !!existing;
     }
   } catch (error) {
-    logger.error("Error generating OTP:", error);
+    console.log("Error generating OTP:", error);
     throw new Error("Failed to generate OTP. Please try again later.");
   }
-  logger.info(`Generated OTP: ${token}`);
-
   return token;
 }

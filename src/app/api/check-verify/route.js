@@ -1,4 +1,3 @@
-import logger from "@/lib/logger";
 import prisma from "@/lib/prisma";
 
 export async function POST(request) {
@@ -43,7 +42,6 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error("Error fetching user:", error);
-    logger.error("Error fetching user:", error);
     errors.server = "Terjadi kesalahan pada server.";
     return new Response(
       JSON.stringify({ errors }),
