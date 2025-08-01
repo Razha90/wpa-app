@@ -125,7 +125,8 @@ export default function Client({ user }) {
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !e.target.value && index > 0) {
-      inputRefs[index - 1].current.focus();
+      inputRefs.current[index - 1].current.focus();
+
     }
   };
 
