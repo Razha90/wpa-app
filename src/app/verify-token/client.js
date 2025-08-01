@@ -2,7 +2,7 @@
 
 import Colors from "@/lib/colors";
 import Email from "../components/icons/email";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Arrow from "../components/icons/arrow";
 import { BlackScreen } from "../components/black_screen";
 import Loading from "../components/loading";
