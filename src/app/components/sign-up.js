@@ -155,7 +155,7 @@ export default function SignUp({
             }
           } else {
             stopLoading?.();
-            loginShow?.();
+            loginShow?.(); 
             signIn("credentials", {
               redirect: false,
               email: data.email,
