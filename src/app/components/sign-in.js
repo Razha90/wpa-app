@@ -10,7 +10,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function SignIn({ loading, stopLoading, alert }) {
+export default function Sign_In({ loading, stopLoading, alert }) {
   const router = useRouter();
   const credentialsAction = async (e) => {
     e.preventDefault();

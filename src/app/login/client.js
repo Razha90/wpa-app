@@ -1,11 +1,11 @@
 "use client";
 import Colors from "@/lib/colors";
 import LinkLogin from "../components/link_login";
-import SignIn from "../components/sign-in";
 import { BlackScreen } from "../components/black_screen";
 import { useState } from "react";
 import Loading from "../components/loading";
 import AlertDanger from "../components/alert_danger";
+import Sign_In from "../components/sign-in";
 
 export default function Client() {
   const [background, setBackground] = useState(false);
@@ -55,7 +55,7 @@ export default function Client() {
         </p>
       </div>
       <LinkLogin />
-      <SignIn loading={handleStartLoader} stopLoading={handleStopLoader} alert={handleShowAlert} />
+      <Sign_In loading={handleStartLoader} stopLoading={handleStopLoader} alert={handleShowAlert} />
     </div>
   );
 }
