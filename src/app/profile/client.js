@@ -10,12 +10,14 @@ import Colors from "@/lib/colors";
 import Exit from "../components/icons/exit";
 import Logout from "./logout";
 import { signOut } from "next-auth/react"
+import ListArrowLink from "../components/reusable/list_arrow_link";
 
-export function Client() {
+export function Client({ auth }) {
   // const [profile, setProfile] = useState(false);
   const [background, setBackground] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [logout, setLogout] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(auth?.user?.role == "ADMIN");
 
 
   const handleEditImageProfile = () => {
@@ -72,6 +74,11 @@ export function Client() {
           clickedBorder={Colors.active.borderRed}
           clicked={handleLogout}
         />
+        {
+          isAdmin && (
+            <ListArrowLink href="/admin" icon={<Arrow />} label={"Menu Admin"} />
+          )
+        }
       </div>
       {!editImage && <Footer />}
     </div>

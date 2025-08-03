@@ -1,0 +1,32 @@
+import Colors from "@/lib/colors";
+import Link from "next/link";
+
+export default function ListArrowLink({
+  label,
+  icon,
+  clicked,
+  width = "w-8",
+  activeColor = Colors.text.blueDark,
+  hoverBg = Colors.hover.blue,
+  activeBg = Colors.hover.blueDark,
+  textColor = Colors.text.blue,
+  colorBg = Colors.background.default,
+  borderColor = Colors.border.gray,
+  activeBorderColor = Colors.hover.borderBlue,
+  clickedBg = Colors.active.blueDark,
+  clickedBorder = Colors.active.borderBlue,
+  href = "#",
+}) {
+  const handleClick = () => {
+    clicked?.();
+  };
+  return (
+    <Link href={href}
+      onClick={handleClick}
+      className={`flex flex-row items-center w-full justify-between rounded-2xl ${hoverBg} transition-all cursor-pointer p-2 ${activeBg} ${colorBg} border-b-2 ${borderColor} ${activeBorderColor} hover:border-b-2 ${clickedBg} ${clickedBorder}`}
+    >
+      <p className={`${textColor}`}>{label}</p>
+      <div className={`${width} ${activeColor}`}>{icon}</div>
+    </Link>
+  );
+}

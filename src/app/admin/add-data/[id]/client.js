@@ -1,9 +1,11 @@
 "use client";
 
 import HeaderAdmin from "@/app/components/header-admin";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { addData } from "./action";
+import AlertDanger from "@/app/components/alert_danger";
+import AlertSucess from "@/app/components/alert_sucess";
 
 export default function Client({ data }) {
   const router = useRouter();
