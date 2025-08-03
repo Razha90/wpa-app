@@ -35,6 +35,17 @@ export async function middleware(request) {
   const isJustLogin = justLogin.includes(pathname);
   const isStopLogin = stopLogin.includes(pathname);
   const isVerifyLogin = verifyLogin.includes(pathname);
+  const isAdminPath = pathname.startsWith("/admin");
+
+  if (isAdminPath && !session) {
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (isAdminPath && session?.user?.role == "ADMIN") {
+    return NextResponse.next();
+  }
+
 
   if (isJustLogin && session && session.user.emailVerified) {
     return NextResponse.next();
@@ -74,7 +85,7 @@ export async function middleware(request) {
 // };
 
 export const config = {
-  matcher: ["/profile", "/", "/login", "/register", "/verify-token"],
+  matcher: ["/profile", "/", "/login", "/register", "/verify-token", "/admin/:path*"],
 };
 
 // export const config = {

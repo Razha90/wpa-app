@@ -31,7 +31,7 @@ export default function Client() {
   }
 
   return (
-    <div className="max-w-xl w-xl mx-auto">
+    <div className="container mx-auto px-2">
       {background && <BlackScreen />}
 
       {showLoader && <Loading />}

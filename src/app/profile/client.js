@@ -41,7 +41,7 @@ export function Client() {
   return (
     <div className="min-h-screen flex flex-col">
       <div
-        className="flex items-start justify-start py-4 px-4 mx-auto w-xl max-w-xl"
+        className="flex items-start justify-start py-4 px-4 container mx-auto"
         style={{ boxShadow: "0 -4px 6px -1px rgba(0,0,0,0.1)" }}
       >
         <h1 className={`font-bold text-3xl ${Colors.text.default}`}>Akun</h1>
@@ -57,7 +57,7 @@ export function Client() {
 
       {logout && <Logout clickedNo={handleLogout} clickedYes={logoutSign} />}
 
-      <div className="max-w-xl flex flex-col items-start justify-start py-4 px-4 mx-auto w-xl mt-10 gap-y-2">
+      <div className="container px-2 flex flex-col items-start justify-start py-4 mx-auto mt-10 gap-y-2">
         <ListArrow icon={<Arrow />} label={"Edit Akun"} />
         <ListArrow icon={<Arrow />} label={"Pengaturan dan Privasi"} />
         <ListArrow

@@ -6,10 +6,10 @@ import { Header } from "./components/header";
 
 export default function Client() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="">
       <Header />
-      <div className="max-w-xl w-xl mx-auto">
-        <h2 className={`${Colors.text.blueDark} text-xl mt-10 animate-fade-down`}>Ikuti Track Belajar Mu</h2>
+      <div className="container mx-auto px-2">
+        <h2 className={`${Colors.text.blueDark} text-xl mt-5 animate-fade-down`}>Ikuti Track Belajar Mu</h2>
       </div>
       <Footer />
     </div>

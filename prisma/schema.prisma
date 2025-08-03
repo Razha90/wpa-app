@@ -22,11 +22,18 @@ model User {
   image         String?
   phone         String    @unique
   phoneVerified DateTime?
+  role          Role      @default(USER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  VerificationToken VerificationToken?
+  VerificationToken      VerificationToken?
+  UserCollectionProgress UserCollectionProgress[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model VerificationToken {
@@ -34,6 +41,54 @@ model VerificationToken {
   token     Int      @unique
   expiredAt DateTime
   userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+}
 
-  user User @relation(fields: [userId], references: [id])
+model Collection {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  type        ContentType
+  sort        Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  contents               Content[]
+  UserCollectionProgress UserCollectionProgress[]
+}
+
+model Content {
+  id           String     @id @default(uuid())
+  title        String
+  body         String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  collectionId String
+  sort         Int
+  collection   Collection @relation(fields: [collectionId], references: [id])
+}
+
+enum ContentType {
+  MATERI
+  SOAL
+}
+
+model UserCollectionProgress {
+  id           String @id @default(uuid())
+  userId       String
+  collectionId String
+
+  // Untuk tipe MATERI: simpan berapa banyak konten sudah dibuka
+  openedContentIds Json? // daftar ID konten yang sudah dibuka
+
+  // Untuk tipe SOAL: nilai/skor dari soal yang dikerjakan
+  score Float? // hanya digunakan jika collection.type == SOAL
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id])
+  collection Collection @relation(fields: [collectionId], references: [id])
+
+  @@unique([userId, collectionId]) // satu user hanya bisa punya satu progress per koleksi
 }

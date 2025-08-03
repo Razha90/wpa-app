@@ -19,7 +19,7 @@ export default function Footer() {
   }, []);
   return (
     <footer
-      className={`z-10 fixed bottom-0 left-0 w-full bg-white text-white p-2 text-center flex justify-center ${
+      className={` z-10 fixed bottom-0 left-0 w-full bg-white text-white p-2 text-center flex justify-center ${
         isFirstLoad ? "animate-fade-up" : ""
       }`}
       style={{ boxShadow: "0 -4px 6px -1px rgba(0,0,0,0.1)" }}

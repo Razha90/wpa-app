@@ -45,6 +45,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           fullname: user.fullname,
           phone: user.phone,
           emailVerified: user.emailVerified,
+          role: user.role
         };
 
         return safeUser;
@@ -58,6 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.fullname = token.fullname;
         session.user.emailVerified = token.emailVerified;
         session.user.email = token.email;
+        session.user.role = token.role;
       }
       return session;
     },
@@ -76,6 +78,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.email = user.email;
         token.emailVerified = user.emailVerified;
         token.fullname = user.fullname;
+        token.role = user.role;
       }
       return token;
     },

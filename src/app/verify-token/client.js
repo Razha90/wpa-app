@@ -142,7 +142,7 @@ export default function Client({ user }) {
     e.preventDefault();
     setLoading(false);
 
-    const pin = inputRefs.map((ref) => ref.current.value).join("");
+    const pin = inputRefs.current.map((ref) => ref.current.value).join("");
     if (pin.length < 6) {
       isAlert("Pin harus terdiri dari 6 digit.");
       return;
@@ -190,7 +190,7 @@ export default function Client({ user }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="container mx-auto px-2">
       <div
         className="flex items-start justify-start py-4 px-4 mx-auto w-xl max-w-xl"
         style={{ boxShadow: "0 -4px 6px -1px rgba(0,0,0,0.1)" }}

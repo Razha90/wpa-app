@@ -1,6 +1,7 @@
 import { Jockey_One, Baloo_Bhaijaan_2 } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import Head from "next/head";
 
 const jockeyOne = Jockey_One({
   variable: "--font-jockey-one",
@@ -22,7 +23,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-      <body className={`${balooBhaijaan2.variable} ${jockeyOne.variable} !font-baloo-bhaijaan-2 antialiased`}>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </Head>
+      <body
+        className={`${balooBhaijaan2.variable} ${jockeyOne.variable} !font-baloo-bhaijaan-2 antialiased`}
+      >
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

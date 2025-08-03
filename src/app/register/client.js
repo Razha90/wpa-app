@@ -32,7 +32,7 @@ export default function Client() {
     setBackgroundLogin(true);
   }
   return (
-    <div className="max-w-xl w-xl mx-auto">
+    <div className="container mx-auto px-2">
       <div className="mt-10">
         <h1
           className={`${Colors.text.default} ${Colors.font.default} text-center text-5xl font-bold`}
