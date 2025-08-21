@@ -13,6 +13,9 @@ export default function HeaderAdmin() {
       style={{ boxShadow: "0 2px 6px 2px rgba(0,0,0,0.1)" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-center gap-x-3">
+        <Link href="/" className={`text-red-400 text-base ${Colors.font.default}`}>
+          Kembali
+        </Link>
         <Link
           href="/admin"
           className={`text-base ${

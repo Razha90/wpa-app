@@ -6,6 +6,7 @@ import { useState } from "react";
 import Loading from "../components/loading";
 import AlertDanger from "../components/alert_danger";
 import Sign_In from "../components/sign-in";
+import Link from "next/link";
 
 export default function Client() {
   const [background, setBackground] = useState(false);
@@ -37,7 +38,7 @@ export default function Client() {
       {showLoader && <Loading />}
 
       {showAlert && <AlertDanger message="Periksa Kembali Email dan Password." closed={handleStopALert}  />}
-      <div className="mt-10">
+      <div className="mt-10 text-center">
         <h1
           className={`${Colors.text.default} ${Colors.font.default} text-center text-5xl font-bold animate-fade-down`}
         >
@@ -48,11 +49,11 @@ export default function Client() {
         >
           Dengan masuk, Anda menyetujui
         </p>
-        <p
+        <Link href={`/privacy`}
           className={`text-base ${Colors.text.blue} text-center ${Colors.font.secondary} animate-fade-down animate-delay-100`}
         >
           Syarat dan Kebijakan Privasi kami
-        </p>
+        </Link>
       </div>
       <LinkLogin />
       <Sign_In loading={handleStartLoader} stopLoading={handleStopLoader} alert={handleShowAlert} />

@@ -1,4 +1,5 @@
 import GenerateOtp from "@/lib/generate_otp";
+import logger from "@/lib/logger";
 import makeExpired from "@/lib/make_expired";
 import prisma from "@/lib/prisma";
 import SendOtp from "@/lib/send_otp";
@@ -57,7 +58,8 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error fetching user:", error);
+    logger.error("Error Make Token:", error);
+    console.error("Error Make Token:", error);
     errors.server = "Terjadi kesalahan pada server.";
     return new Response(JSON.stringify({ errors }), { status: 500 });
   }

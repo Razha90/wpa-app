@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./prisma/generated/client"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+  // binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  fullname      String
+  email         String    @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  phone         String    @unique
+  phoneVerified DateTime?
+  role          Role      @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  VerificationToken      VerificationToken?
+  UserCollectionProgress UserCollectionProgress[]
+  UserContentProgress    UserContentProgress[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  token     Int      @unique
+  expiredAt DateTime
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Collection {
+  id          String      @id @default(uuid())
+  name        String      @db.Text
+  description String?     @db.Text
+  type        ContentType
+  sort        Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  contents               Content[]
+  UserCollectionProgress UserCollectionProgress[]
+}
+
+model Content {
+  id                  String                @id @default(uuid())
+  title               String?               @db.Text
+  body                String?               @db.Text
+  question            String?               @db.Text
+  vr                  String?               @db.Text
+  answer              Answer?
+  choiceA             String?               @db.Text
+  choiceB             String?               @db.Text
+  choiceC             String?               @db.Text
+  choiceD             String?               @db.Text
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  collectionId        String
+  sort                Int
+  collection          Collection            @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  UserContentProgress UserContentProgress[]
+}
+
+model UserContentProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  contentId String
+  score     Float?
+  openedAt  DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentId]) // mencegah duplikat data progress
+}
+
+enum Answer {
+  A
+  B
+  C
+  D
+}
+
+enum ContentType {
+  MATERI
+  SOAL
+}
+
+model UserCollectionProgress {
+  id               String   @id @default(uuid())
+  userId           String
+  collectionId     String
+  openedContentIds Json?
+  score            Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id])
+  collection Collection @relation(fields: [collectionId], references: [id])
+
+  @@unique([userId, collectionId])
+}

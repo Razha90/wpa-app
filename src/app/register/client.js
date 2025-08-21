@@ -37,17 +37,17 @@ export default function Client() {
         <h1
           className={`${Colors.text.default} ${Colors.font.default} text-center text-5xl font-bold`}
         >
-          Ayo Daftar
+          Bergabung Sekarang
         </h1>
         <p
           className={`text-center ${Colors.text.default} text-base ${Colors.font.secondary} mt-5`}
         >
-          Dengan masuk, Anda menyetujui
+          Mulai perjalanan Anda bersama kami dan nikmati berbagai manfaat.
         </p>
         <p
-          className={`text-base ${Colors.text.blue} text-center ${Colors.font.secondary}`}
+          className={`text-base ${Colors.text.default} text-center text-sm ${Colors.font.secondary}`}
         >
-          Syarat dan Kebijakan Privasi kami
+          Let&apos;s go daftar.
         </p>
       </div>
       {background && <BlackScreen />}

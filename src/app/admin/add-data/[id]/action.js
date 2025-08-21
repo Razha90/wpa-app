@@ -4,6 +4,8 @@ export async function addData(prevState, formData) {
   const title = formData.get("title")?.toString() || "";
   const body = formData.get("body")?.toString() || "";
   const id = formData.get("id")?.toString() || "";
+  const vr = formData.get("vr")?.toString() || "";
+  const parentId = formData.get("parentId")?.toString() || "";
 
   if (!title || title.length <= 3) {
     return {
@@ -14,7 +16,7 @@ export async function addData(prevState, formData) {
         server: "",
         id: "",
       },
-      values: { title, body },
+      values: { title, body, id },
     };
   }
 
@@ -27,7 +29,20 @@ export async function addData(prevState, formData) {
         server: "",
         id: "",
       },
-      values: { title, body },
+      values: { title, body, id },
+    };
+  }
+
+  if (!parentId) {
+    return {
+      success: false,
+      errors: {
+        title: "",
+        body: "",
+        id: "Tidak ada data ID.",
+        server: "",
+      },
+      values: { title, body, id },
     };
   }
 
@@ -40,7 +55,7 @@ export async function addData(prevState, formData) {
         id: "Tidak ada data ID.",
         server: "",
       },
-      values: { title, body },
+      values: { title, body, id },
     };
   }
 
@@ -66,6 +81,9 @@ export async function addData(prevState, formData) {
     }
 
     const lastSort = await prisma.content.findFirst({
+      where: {
+        collectionId: parentId,
+      },
       orderBy: {
         sort: "desc",
       },
@@ -76,14 +94,27 @@ export async function addData(prevState, formData) {
 
     const nextSort = (lastSort?.sort ?? 0) + 1;
 
-    const progress = await prisma.content.create({
-      data: {
-        title,
-        body,
-        sort: nextSort,
-        collectionId: id,
-      },
-    });
+    let progress;
+    if (vr) {
+      progress = await prisma.content.create({
+        data: {
+          title,
+          body,
+          sort: nextSort,
+          vr,
+          collectionId: id,
+        },
+      });
+    } else {
+      progress = await prisma.content.create({
+        data: {
+          title,
+          body,
+          sort: nextSort,
+          collectionId: id,
+        },
+      });
+    }
 
     if (!progress) {
       return {
@@ -94,10 +125,9 @@ export async function addData(prevState, formData) {
           body: "",
           id: "",
         },
-        values: { title, body },
+        values: { title, body, vr },
       };
     }
-    console.log("Berhasil");
     return {
       success: true,
       errors: {
@@ -106,7 +136,7 @@ export async function addData(prevState, formData) {
         body: "",
         id: "",
       },
-      values: { title: "", body: "" },
+      values: { title: "", body: "", vr:"" },
     };
   } catch (error) {
     console.log("Error saat menyimpan koleksi:", error);

@@ -1,7 +1,7 @@
 import { Jockey_One, Baloo_Bhaijaan_2 } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
+import AudioPlayer from "./components/audio_player";
 
 const jockeyOne = Jockey_One({
   variable: "--font-jockey-one",
@@ -31,7 +31,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${balooBhaijaan2.variable} ${jockeyOne.variable} !font-baloo-bhaijaan-2 antialiased`}
       >
-        <SessionProvider>{children}</SessionProvider>
+        
+        <AudioPlayer>
+          {children}
+        </AudioPlayer>
       </body>
     </html>
   );

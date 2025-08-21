@@ -9,6 +9,7 @@ const Colors = {
     redDark: "bg-red-600",
     gray: "bg-gray-200",
     grayDark: "bg-gray-500",
+    green: "bg-green-500",
   },
   text: {
     default: "text-slate-600",

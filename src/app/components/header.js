@@ -11,7 +11,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <h1 className={`text-3xl font-bold ${Colors.text.default} ${Colors.font.default}`}>Pembelajaran</h1>
         <nav className="space-x-4">
-          <Link href="/" className="">
+          <Link href="/profile" className="">
             <p></p>
             <div className="w-10 h-10">
               <AvatarDefault />

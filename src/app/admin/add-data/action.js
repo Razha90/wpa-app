@@ -1,4 +1,5 @@
 "use server";
+import logger from "@/lib/logger";
 import prisma from "@/lib/prisma";
 
 export async function simpanKoleksi(prevState, formData) {
@@ -45,7 +46,6 @@ export async function simpanKoleksi(prevState, formData) {
     };
   }
 
-  // Simpan ke DB
   try {
     const lastSort = await prisma.collection.findFirst({
       orderBy: {
@@ -57,7 +57,6 @@ export async function simpanKoleksi(prevState, formData) {
     });
     
     const nextSort = (lastSort?.sort ?? 0) + 1;
-    
     const progress = await prisma.collection.create({
       data: {
         name: title,
@@ -90,6 +89,7 @@ export async function simpanKoleksi(prevState, formData) {
       values: { title:"", type:"", description:"" },
     };
   } catch (error) {
+    logger.error("Error saat menyimpan koleksi:", error);
     console.log("Error saat menyimpan koleksi:", error);
     return {
       success: false,

@@ -1,9 +1,7 @@
 import NextAuth from "next-auth";
-import { PrismaClient } from "@prisma/client";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
+import prisma from "./lib/prisma";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   // adapter: PrismaAdapter(prisma),
@@ -21,6 +19,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: { email: credentials.email },
           });
         } catch (error) {
+          console.error("Error in authorize:", error);
+          await fetch(`${process.env.NEXTAUTH_URL}/api/logger`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: error || "Error in authorize function",
+              path: "src/auth.js - authorize function error",
+            }),
+          });
           throw new Error(
             "Server Bermasalah harap coba lagi, atau hubungi admin."
           );
@@ -30,7 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new Error("Email tidak ditemukan.");
         }
 
-        const isValidPassword = await bcrypt.compare(
+        const isValidPassword = bcrypt.compare(
           credentials.password,
           user.password
         );
@@ -45,7 +52,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           fullname: user.fullname,
           phone: user.phone,
           emailVerified: user.emailVerified,
-          role: user.role
+          role: user.role,
         };
 
         return safeUser;

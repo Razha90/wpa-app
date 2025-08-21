@@ -3,7 +3,7 @@ import Colors from "@/lib/colors";
 import AvatarDefault from "../components/icons/avatar-default";
 import  Camera  from "../components/icons/camera";
 
-export function MenuProfile({clicked}) {
+export function MenuProfile({clicked, name = "Nama Pengguna"}) {
   const handleProfileClick = () => {
     clicked?.();
   };
@@ -19,7 +19,7 @@ export function MenuProfile({clicked}) {
         </div>
       </div>
     </div>
-    <p className={`${Colors.text.default} font-bold text-xl mt-4`}>Nama Penguna</p>
+    <p className={`${Colors.text.default} font-bold text-xl mt-4`}>{name}</p>
   </div>
   )
 }

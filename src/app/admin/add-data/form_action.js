@@ -97,8 +97,8 @@ export default function FormAction() {
             <option disabled hidden value="">
               Pilih Jenis
             </option>
-            <option value="MATERI">Soal Latihan</option>
-            <option value="SOAL">Materi</option>
+            <option value="SOAL">Soal Latihan</option>
+            <option value="MATERI">Materi</option>
           </select>
           {!hasChanged && state.errors.type && (
             <p className="text-red-500 text-sm">{state.errors.type}</p>

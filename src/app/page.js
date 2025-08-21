@@ -1,10 +1,57 @@
+import prisma from "@/lib/prisma";
 import Client from "./client";
+import logger from "@/lib/logger";
+import { auth } from "@/auth";
 
-export default function Home() {
-  
+export default async function Home() {
+  let data = [];
+  const session = await auth();
+  let userId = session?.user?.userId;
+  try {
+    data = await prisma.collection.findMany({
+      orderBy: {
+        sort: "asc",
+      },
+      include: {
+        UserCollectionProgress:{
+          where: { userId },
+          select: {
+            score:true
+          }
+        },
+        contents: {
+          orderBy: {
+            sort: "asc",
+          },
+          select: {
+            sort: true,
+            title: true,
+            id: true,
+            UserContentProgress: {
+              where: { userId },
+              select: {
+                id: true,
+                openedAt: true,
+              },
+            },
+            
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    logger.error("Error fetching data:", error);
+    return (
+      <div className="text-red-500 text-center">
+        <p>Failed to load data. Please try again later.</p>
+      </div>
+    )
+  }
+
   return (
     <>
-      <Client />
+      <Client data={data} />
     </>
   );
 }

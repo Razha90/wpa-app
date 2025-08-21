@@ -388,18 +388,18 @@ export default function SignUp({
         />
         <p className={`${Colors.text.default} absolute -top-[2px] left-6`}>
           Dengan mencentang kotak, Anda menyetujui{" "}
-          <Link href={"/term"} className={`${Colors.text.blueDark}`}>
+          <Link href={"/privacy"} className={`${Colors.text.blueDark}`}>
             Syarat
           </Link>{" "}
           dan{" "}
-          <Link href={`/condition`} className={`${Colors.text.blue}`}>
+          <Link href={`/privacy`} className={`${Colors.text.blue}`}>
             Ketentuan kami
           </Link>
           .
         </p>
       </div>
 
-      <div className="flex justify-center w-full mt-25 animate-fade-down animate-delay-900">
+      <div className="flex justify-center w-full mt-15 animate-fade-down animate-delay-900">
         <input
           type="submit"
           value="Daftar Segera"
@@ -418,6 +418,7 @@ export default function SignUp({
           </Link>
         </p>
       </div>
+      <div className="h-20"></div>
     </form>
   );
 }

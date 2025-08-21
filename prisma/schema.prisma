@@ -5,7 +5,10 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  output        = "./prisma/generated/client"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+  // binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -29,6 +32,7 @@ model User {
 
   VerificationToken      VerificationToken?
   UserCollectionProgress UserCollectionProgress[]
+  UserContentProgress    UserContentProgress[]
 }
 
 enum Role {
@@ -46,8 +50,8 @@ model VerificationToken {
 
 model Collection {
   id          String      @id @default(uuid())
-  name        String
-  description String?
+  name        String      @db.Text
+  description String?     @db.Text
   type        ContentType
   sort        Int?
   createdAt   DateTime    @default(now())
@@ -58,14 +62,42 @@ model Collection {
 }
 
 model Content {
-  id           String     @id @default(uuid())
-  title        String
-  body         String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  collectionId String
-  sort         Int
-  collection   Collection @relation(fields: [collectionId], references: [id])
+  id                  String                @id @default(uuid())
+  title               String?               @db.Text
+  body                String?               @db.Text
+  question            String?               @db.Text
+  vr                  String?               @db.Text
+  answer              Answer?
+  choiceA             String?               @db.Text
+  choiceB             String?               @db.Text
+  choiceC             String?               @db.Text
+  choiceD             String?               @db.Text
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  collectionId        String
+  sort                Int
+  collection          Collection            @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  UserContentProgress UserContentProgress[]
+}
+
+model UserContentProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  contentId String
+  score     Float?
+  openedAt  DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentId]) // mencegah duplikat data progress
+}
+
+enum Answer {
+  A
+  B
+  C
+  D
 }
 
 enum ContentType {
@@ -74,21 +106,16 @@ enum ContentType {
 }
 
 model UserCollectionProgress {
-  id           String @id @default(uuid())
-  userId       String
-  collectionId String
-
-  // Untuk tipe MATERI: simpan berapa banyak konten sudah dibuka
-  openedContentIds Json? // daftar ID konten yang sudah dibuka
-
-  // Untuk tipe SOAL: nilai/skor dari soal yang dikerjakan
-  score Float? // hanya digunakan jika collection.type == SOAL
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String   @id @default(uuid())
+  userId           String
+  collectionId     String
+  openedContentIds Json?
+  score            Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   user       User       @relation(fields: [userId], references: [id])
   collection Collection @relation(fields: [collectionId], references: [id])
 
-  @@unique([userId, collectionId]) // satu user hanya bisa punya satu progress per koleksi
+  @@unique([userId, collectionId])
 }

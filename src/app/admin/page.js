@@ -10,7 +10,11 @@ export default async function Home() {
         id: true,
         name: true,
         type: true,
-        contents: true,
+        contents: {
+          orderBy: {
+            sort: "asc",
+          },
+        },
         description: true,
         sort: true,
       },
@@ -23,14 +27,14 @@ export default async function Home() {
     <>
       <HeaderAdmin />
       <div className="container mx-auto px-2 mt-5">
-        <h2 className="text-blue-600 text-2xl font-bold mb-3">Daftar Koleksi</h2>
-        {
-          collection ? (
-            <ListContent data={collection} />
-          ) : (
-            <h2>Tidak Ditemukan data</h2>
-          )
-        }
+        <h2 className="text-blue-600 text-2xl font-bold mb-3">
+          Daftar Koleksi
+        </h2>
+        {collection ? (
+          <ListContent data={collection} />
+        ) : (
+          <h2>Tidak Ditemukan data</h2>
+        )}
         {/* {collection.map((item) => (
             <li key={item.id} className="mb-2 text-blue-400">
               {item.name} - {item.type}

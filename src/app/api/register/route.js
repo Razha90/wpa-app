@@ -1,4 +1,5 @@
 import GenerateOtp from "@/lib/generate_otp";
+import logger from "@/lib/logger";
 import makeExpired from "@/lib/make_expired";
 import prisma from "@/lib/prisma";
 import SendOtp from "@/lib/send_otp";
@@ -114,6 +115,7 @@ export async function POST(request) {
 
     await SendOtp({ email, name: user.fullname, otp: token });
   } catch (err) {
+    logger.error("Error creating user:", err);
     console.log("Error creating user:", err);
     errors.server = "Terjadi kesalahan saat membuat pengguna.";
     return new Response(JSON.stringify({ errors }), {

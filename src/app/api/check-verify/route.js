@@ -1,3 +1,4 @@
+import logger from "@/lib/logger";
 import prisma from "@/lib/prisma";
 
 export async function POST(request) {
@@ -30,8 +31,6 @@ export async function POST(request) {
       return new Response(JSON.stringify({ errors }), { status: 404 });
     }
 
-    console.log("Data:", data);
-
     return new Response(
       JSON.stringify({
         date: data.VerificationToken
@@ -41,7 +40,8 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error fetching user:", error);
+    logger.error("Error Check Verify:", error);
+    console.error("Error Check Verify:", error);
     errors.server = "Terjadi kesalahan pada server.";
     return new Response(
       JSON.stringify({ errors }),

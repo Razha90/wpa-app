@@ -156,7 +156,6 @@ export default function Client({ user }) {
         body: JSON.stringify({ email: user.user.email, token: pin }),
       });
       const result = await response.json();
-      console.log("Response from validation-token:", result);
       if (response.ok) {
         setSuccess(true);
         refreshSession();
@@ -192,7 +191,7 @@ export default function Client({ user }) {
   return (
     <div className="container mx-auto px-2">
       <div
-        className="flex items-start justify-start py-4 px-4 mx-auto w-xl max-w-xl"
+        className="flex items-start justify-start py-4 px-4 mx-auto container"
         style={{ boxShadow: "0 -4px 6px -1px rgba(0,0,0,0.1)" }}
       >
         <div className="flex flex-row items-center gap-x-2">
@@ -206,7 +205,7 @@ export default function Client({ user }) {
       </div>
 
       {loading && (
-        <div className="max-w-xl py-4 px-4 mx-auto w-xl mt-10 gap-y-2">
+        <div className="container py-4 px-4 mx-auto mt-10 gap-y-2">
           <p
             className={`${Colors.text.blueDark} text-3xl font-bold text-center`}
           >
@@ -247,7 +246,7 @@ export default function Client({ user }) {
                     type="text"
                     maxLength="1"
                     id={`code-${index}`}
-                    className={`block w-15 h-15 py-5 text-5xl  font-extrabold text-center text-blue-600 bg-white border rounded-lg focus:ring-blue-300 focus:border-blue-300 ${
+                    className={`block w-12 h-15 py-5 text-5xl  font-extrabold text-center text-blue-600 bg-white border rounded-lg focus:ring-blue-300 focus:border-blue-300 ${
                       wrongPin ? "border-red-500" : "border-gray-300"
                     }`}
                     required

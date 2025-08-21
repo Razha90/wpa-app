@@ -8,12 +8,13 @@ export default async function Home({ params }) {
     select: {
       id: true,
       name: true,
+      type: true
     },
   });
   return (
     <>
       {data ? (
-        <Client data={data} />
+        <Client data={data} parentId={id} />
       ) : (
         <div className="w-full text-center h-dvw flex items-center flex-col justify-center">
           <h1 className="text-blue-500 font-bold text-3xl">404</h1>

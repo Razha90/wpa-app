@@ -1,3 +1,6 @@
+import logger from "@/lib/logger";
+import prisma from "@/lib/prisma";
+
 export async function POST(request) {
   const body = await request.json();
   const { token, email } = body;
@@ -67,7 +70,8 @@ export async function POST(request) {
       status: 200,
     });
   } catch (error) {
-    console.error("Error fetching user:", error);
+    logger.error("Error Validation Token:", error);
+    console.error("Error Validation Token:", error);
     errors.server = "Terjadi kesalahan pada server. Silakan coba lagi nanti.";
     return new Response(JSON.stringify({ errors }), { status: 500 });
   }
