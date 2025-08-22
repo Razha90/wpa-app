@@ -1,5 +1,6 @@
 "use client";
 
+import { useClicked } from "@/lib/clicked_context";
 import Colors from "@/lib/colors";
 
 export default function NavItemClicked({
@@ -13,7 +14,9 @@ export default function NavItemClicked({
   hoverBg = Colors.hover.gray,
   colorText = Colors.text.gray,
 }) {
+  const {play} = useClicked();
   const handleClick = () => {
+    play();
     clicked?.();
   };
   activeColor = activeColor || Colors.text.default;

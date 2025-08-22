@@ -4,6 +4,7 @@ import FooterMaterial from "@/app/components/footer_material";
 import HeaderMaterial from "@/app/components/header_material";
 import Vr from "@/app/components/icons/vr";
 import MenuNav from "@/app/components/menu_nav";
+import { useClicked } from "@/lib/clicked_context";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -31,7 +32,7 @@ export default function Client({ data, id }) {
   useEffect(() => {
     const currentRef = ref.current; // salin ref.current ke variabel lokal
     const currentData = data.current; // salin data.current ke variabel lokal
-  
+
     const observer = new IntersectionObserver(
       () => {
         if (currentData.UserContentProgress.length === 0) {
@@ -47,20 +48,19 @@ export default function Client({ data, id }) {
       },
       { threshold: 0.5 }
     );
-  
+
     if (currentRef) {
       observer.observe(currentRef);
     }
-  
+
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);
       }
     };
   }, [data]); // tambahkan data sebagai dependency
-  
 
-  console.log("Data", data);
+  const { play } = useClicked();
 
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -86,14 +86,22 @@ export default function Client({ data, id }) {
           dangerouslySetInnerHTML={{ __html: data.current.body }}
         ></div>
         {data.current?.vr && (
-          <div className="container mx-auto mt-10 text-center">
+          <div className="container mx-auto mt-10 text-center" id="vr">
             <h3 className="text-blue-500 text-2xl font-bold">
               Jelajahi Dunia Baru
             </h3>
             <div className="flex justify-center aspect-square">
-              <iframe src={data.current.vr} title="Cuplikan Web Assemblr" className="w-full h-full"/>
+              <iframe
+                src={data.current.vr}
+                title="Cuplikan Web Assemblr"
+                className="w-full h-full"
+              />
             </div>
-            <Link href={data.current.vr} className="flex justify-center">
+            <Link
+              onClick={play}
+              href={data.current.vr}
+              className="flex justify-center"
+            >
               <div className="w-20 h-20 text-white bg-blue-500 p-4 rounded-full text-center transition-all active:bg-white active:text-blue-500 hover:bg-white border-2 hover:text-blue-500 border-blue-500 mt-4">
                 <Vr />
               </div>

@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { addData } from "./action";
 import AlertDanger from "@/app/components/alert_danger";
 import AlertSucess from "@/app/components/alert_sucess";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Client({ data, parentId }) {
   const router = useRouter();
+  const { play } = useClicked();
   const [stateSucces, setStateSucces] = useState("");
   const [stateError, setStateError] = useState("");
   const [state, formAction, isPending] = useActionState(addData, {
@@ -41,6 +43,7 @@ export default function Client({ data, parentId }) {
   const [choose, setChoose] = useState("");
   const [hasChanged, setHasChanged] = useState(false);
   const back = () => {
+    play();
     router.push("/admin");
   };
   const handleCloseDanger = () => {

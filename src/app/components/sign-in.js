@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { signIn } from "next-auth/react";
 import Email from "./icons/email";
@@ -9,13 +9,14 @@ import OpenEye from "./icons/open_eye";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Sign_In({ loading, stopLoading, alert }) {
   const router = useRouter();
   const credentialsAction = async (e) => {
     e.preventDefault();
     loading?.();
-    
+
     const form = e.currentTarget;
     const email = form.email.value;
     const password = form.password.value;
@@ -27,15 +28,15 @@ export default function Sign_In({ loading, stopLoading, alert }) {
     });
 
     if (result.url) {
+      play();
       router.push("/");
     } else {
       stopLoading?.();
       alert?.();
     }
-
-
   };
   const [security, setSecurity] = useState(false);
+  const { play } = useClicked();
   return (
     <form onSubmit={credentialsAction} className="mt-15 max-w-md mx-auto">
       <div className="flex flex-col animate-fade-down animate-delay-300">
@@ -71,7 +72,10 @@ export default function Sign_In({ loading, stopLoading, alert }) {
             placeholder="Password"
           />
           <div
-            onClick={() => setSecurity(!security)}
+            onClick={() => {
+              play();
+              setSecurity(!security)
+            }}
             className={`w-10 h-8 ${Colors.text.grayLight} cursor-pointer ${Colors.background.gray} rounded-lg py-1 px-2 mb-1 border border-white ${Colors.hover.borderGray} ${Colors.hover.bgWhite} ${Colors.active.borderGray} ${Colors.active.bgWhite}`}
           >
             {security ? <OpenEye /> : <CloseEye />}
@@ -84,6 +88,7 @@ export default function Sign_In({ loading, stopLoading, alert }) {
 
       <div className="mt-10 text-right animate-fade-down animate-delay-500">
         <Link
+          onClick={play}
           href={`/forgot-password`}
           className={`${Colors.text.blueDark} text-base cursor-pointer hover:underline decoration-2 underline-offset-4 ${Colors.active.underline}`}
         >

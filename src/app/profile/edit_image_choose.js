@@ -4,20 +4,79 @@ import Album from "../components/icons/album";
 import CameraTake from "../components/icons/camera_take";
 import Delete from "../components/icons/delete";
 import NavItemClicked from "../components/reusable/nav_item_clicked";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Colors from "@/lib/colors";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export default function EditImageChoose() {
+export default function EditImageChoose({
+  closed,
+  isSucess,
+  isError,
+  image = null,
+}) {
+  const handleClose = () => {
+    closed?.();
+  };
   const inputRef = useRef(null);
   const cameraRef = useRef(null);
-  const [preview, setPreview] = useState(null);
+  const { update } = useSession();
+  const route = useRouter();
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
+    e.preventDefault();
+    handleClose();
+
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreview(imageUrl);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      await fetch("/api/upload/avatar", {
+        method: "POST",
+        body: formData,
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            throw new Error("Failed to upload image");
+          }
+          isSucess?.("Gambar berhasil diunggah");
+          await update({ updated: true });
+          route.refresh();
+          return;
+        })
+        .then((data) => console.log(data))
+        .catch((error) => {
+          isError?.("Gagal mengunggah gambar");
+        });
     }
+  };
+
+  const handleDeletedImage = async (e) => {
+    handleClose();
+    e.preventDefault();
+
+    if (!image) {
+      isError?.("Tidak ada gambar yang dihapus");
+      return;
+    }
+
+    await fetch("/api/delete-image", {
+      method: "POST",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Failed to upload image");
+        }
+        isSucess?.("Gambar berhasil Di Hapus");
+        await update({ updated: true });
+        route.refresh();
+        return;
+      })
+      .then((data) => console.log(data))
+      .catch((error) => {
+        isError?.("Gagal hapus gambar");
+      });
   };
 
   const openFilePicker = () => {
@@ -61,16 +120,33 @@ export default function EditImageChoose() {
           width="w-7"
           clicked={openCamera}
         />
-        <NavItemClicked
-          label={"Hapus Gambar"}
-          icon={<Delete />}
-          width="w-7"
-          activeColor={Colors.group_active.red}
-          hoverBg={Colors.hover.red}
-          activeBg={Colors.active.red}
-          clickedColor={Colors.active.red}
-          colorText={Colors.text.danger}
-        />
+        {image ? (
+          <div onClick={handleDeletedImage}>
+            <NavItemClicked
+              label={"Hapus Gambar"}
+              icon={<Delete />}
+              width="w-7"
+              activeColor={Colors.group_active.red}
+              hoverBg={Colors.hover.red}
+              activeBg={Colors.active.red}
+              clickedColor={Colors.active.red}
+              colorText={Colors.text.danger}
+            />
+          </div>
+        ) : (
+          <div onClick={handleClose}>
+            <NavItemClicked
+              label={"Hapus Gambar"}
+              icon={<Delete />}
+              width="w-7"
+              activeColor={Colors.group_active.blue}
+              hoverBg={Colors.hover.gray}
+              activeBg={Colors.active.gray}
+              clickedColor={Colors.active.gray}
+              colorText={Colors.text.default}
+            />
+          </div>
+        )}
       </div>
     </footer>
   );

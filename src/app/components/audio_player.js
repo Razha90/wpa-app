@@ -1,8 +1,7 @@
 "use client";
 
 import { AudioContext } from "@/lib/audio_context";
-import { SessionProvider } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import useSound from "use-sound";
 
 export default function AudioPlayer({ children }) {
@@ -53,7 +52,7 @@ export default function AudioPlayer({ children }) {
 
   return (
     <AudioContext.Provider value={{ isStopped, togglePlay, volume, setVolume }}>
-      <SessionProvider>{children}</SessionProvider>
+      {children}
     </AudioContext.Provider>
   );
 }

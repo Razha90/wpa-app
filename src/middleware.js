@@ -30,7 +30,7 @@ export async function middleware(request) {
   const verifyLogin = ["/verify-token"];
 
   const session = await auth();
-  // console.log("session", session);
+  console.log("session", session);
 
   const isJustLogin = justLogin.includes(pathname);
   const isStopLogin = stopLogin.includes(pathname);

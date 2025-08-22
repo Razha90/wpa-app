@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { addData } from "./action";
 import AlertDanger from "@/app/components/alert_danger";
 import AlertSucess from "@/app/components/alert_sucess";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Client({ data, parentId }) {
   const router = useRouter();
@@ -13,14 +14,16 @@ export default function Client({ data, parentId }) {
   const [stateError, setStateError] = useState("");
   const [state, formAction, isPending] = useActionState(addData, {
     success: false,
-    errors: { title: "", body: "", server: "", id: "", vr:"" },
-    values: { title: "", body: "", id: "", vr:"" },
+    errors: { title: "", body: "", server: "", id: "", vr: "" },
+    values: { title: "", body: "", id: "", vr: "" },
   });
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [vr, setVr] = useState("");
   const [hasChanged, setHasChanged] = useState(false);
+  const { play } = useClicked();
   const back = () => {
+    play();
     router.push("/admin");
   };
   const handleCloseDanger = () => {

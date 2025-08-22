@@ -11,6 +11,7 @@ import Avatar from "./icons/avatar";
 import Phone from "./icons/phone";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function SignUp({
   returnError,
@@ -18,6 +19,7 @@ export default function SignUp({
   stopLoading,
   loginShow,
 }) {
+  const { play } = useClicked();
   const [isCheckFullname, setCheckFullname] = useState("");
   const [isCheckEmail, setCheckEmail] = useState("");
   const [isCheckPhone, setCheckPhone] = useState("");
@@ -155,17 +157,19 @@ export default function SignUp({
             }
           } else {
             stopLoading?.();
-            loginShow?.(); 
+            loginShow?.();
             signIn("credentials", {
               redirect: false,
               email: data.email,
               password: data.password,
             }).then((response) => {
               if (response.ok) {
+                play();
                 router.push("/verify-token");
               } else {
                 returnError("Login gagal, silakan coba lagi.");
                 setTimeout(() => {
+                  play();
                   router.push("/login");
                 }, 2000);
               }
@@ -326,7 +330,10 @@ export default function SignUp({
             placeholder="Password"
           />
           <div
-            onClick={() => setSecurity(!security)}
+            onClick={() => {
+              play();
+              setSecurity(!security)
+            }}
             className={`w-10 h-8 ${Colors.text.grayLight} cursor-pointer ${Colors.background.gray} rounded-lg py-1 px-2 mb-1 border border-white ${Colors.hover.borderGray} ${Colors.hover.bgWhite} ${Colors.active.borderGray} ${Colors.active.bgWhite}`}
           >
             {security ? <OpenEye /> : <CloseEye />}
@@ -388,11 +395,19 @@ export default function SignUp({
         />
         <p className={`${Colors.text.default} absolute -top-[2px] left-6`}>
           Dengan mencentang kotak, Anda menyetujui{" "}
-          <Link href={"/privacy"} className={`${Colors.text.blueDark}`}>
+          <Link
+            onClick={play}
+            href={"/privacy"}
+            className={`${Colors.text.blueDark}`}
+          >
             Syarat
           </Link>{" "}
           dan{" "}
-          <Link href={`/privacy`} className={`${Colors.text.blue}`}>
+          <Link
+            onClick={play}
+            href={`/privacy`}
+            className={`${Colors.text.blue}`}
+          >
             Ketentuan kami
           </Link>
           .
@@ -411,6 +426,7 @@ export default function SignUp({
         <p className={`${Colors.text.default} font-bold`}>
           Apakah kamu punya akun?{" "}
           <Link
+            onClick={play}
             href={"/login"}
             className={`${Colors.text.blue} ${Colors.hover.opacity} ${Colors.active.opacity}`}
           >

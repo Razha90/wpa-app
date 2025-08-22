@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Arrow from "./icons/arrow";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function FooterProfile({clicked}) {
   const [isFirstLoad, setIsFirstLoad] = useState(false);
+  const { play } = useClicked();
 
   useEffect(() => {
     // hanya akan jalan sekali saat pertama render di browser
@@ -16,6 +18,7 @@ export default function FooterProfile({clicked}) {
     }
   }, []);
   const handleClick = () => {
+    play();
     clicked?.();
   }
   return (

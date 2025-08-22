@@ -1,17 +1,21 @@
 import { useRouter } from "next/navigation";
 import ExitDoor from "./icons/exit_door";
 import Menu from "./icons/menu";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function HeaderMaterial({
   title = "No Title",
   toggleMenu,
   page = 1,
 }) {
+  const {play } = useClicked();
   const router = useRouter();
   const handleMenuClick = () => {
+    play();
     toggleMenu?.();
   };
   const handleExitClick = () => {
+    play();
     router.push("/");
   };
   return (

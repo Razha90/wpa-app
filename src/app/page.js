@@ -25,7 +25,8 @@ export default async function Home() {
           },
           select: {
             sort: true,
-            title: true,
+            // title: true,
+            vr:true,
             id: true,
             UserContentProgress: {
               where: { userId },

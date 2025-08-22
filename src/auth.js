@@ -53,6 +53,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           phone: user.phone,
           emailVerified: user.emailVerified,
           role: user.role,
+          image: user.image || null
         };
 
         return safeUser;
@@ -67,6 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.emailVerified = token.emailVerified;
         session.user.email = token.email;
         session.user.role = token.role;
+        session.user.image = token.image || null;
       }
       return session;
     },
@@ -78,6 +80,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (userInDb) {
           token.emailVerified = userInDb.emailVerified;
           token.fullname = userInDb.fullname;
+          token.image = userInDb.image || null;
         }
       }
       if (user) {
@@ -86,6 +89,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.emailVerified = user.emailVerified;
         token.fullname = user.fullname;
         token.role = user.role;
+        token.image = user.image || null;
       }
       return token;
     },

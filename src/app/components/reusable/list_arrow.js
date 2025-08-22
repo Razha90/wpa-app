@@ -1,5 +1,5 @@
+import { useClicked } from "@/lib/clicked_context";
 import Colors from "@/lib/colors";
-import { useClickedSound } from "../clicked_sound";
 
 export default function ListArrow({
   label,
@@ -16,9 +16,9 @@ export default function ListArrow({
   clickedBg = Colors.active.blueDark,
   clickedBorder = Colors.active.borderBlue,
 }) {
-  const playClicked = useClickedSound();
+  const { play } = useClicked();
   const handleClick = () => {
-    playClicked();
+    play();
     clicked?.();
   };
   return (

@@ -2,9 +2,12 @@ import Link from "next/link";
 import Close from "./icons/close";
 import Arrow from "./icons/arrow";
 import Thumb from "./icons/thumb";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function MenuNav({ closedMenu, list, id, current }) {
+  const {play} = useClicked();
   const handleClose = () => {
+    play();
     closedMenu?.();
   };
   // console.log("MenuNav Rendered", { list, id, current });

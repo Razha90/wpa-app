@@ -1,6 +1,8 @@
+import { useClicked } from "@/lib/clicked_context";
 import Arrow from "./icons/arrow";
 
 export default function FooterSoal({ current, before, after, clicked, handleFinish }) {
+  const { play } = useClicked();
   return (
     <footer
       style={{ boxShadow: "0 2px 6px 2px rgba(0,0,0,0.1)" }}
@@ -11,7 +13,10 @@ export default function FooterSoal({ current, before, after, clicked, handleFini
           {before ? (
             <div
               className="flex flex-row items-center"
-              onClick={() => clicked(before)}
+              onClick={() => {
+                play();
+                clicked(before);
+              }}
             >
               <div className="w-6 h-6 text-gray-500 rotate-180">
                 <Arrow />
@@ -24,7 +29,10 @@ export default function FooterSoal({ current, before, after, clicked, handleFini
           {after ? (
             <div
               className="flex flex-row items-center"
-              onClick={() => clicked(after)}
+              onClick={() => {
+                play();
+                clicked(after);
+              }}
             >
               <p className="text-gray-500">Lanjut</p>
               <div className="w-6 h-6 text-gray-500">
@@ -35,7 +43,10 @@ export default function FooterSoal({ current, before, after, clicked, handleFini
             <div></div>
           )}
           {!after && (
-            <div onClick={() => handleFinish()} className="flex flex-row items-center">
+            <div onClick={() => {
+              play();
+              handleFinish()
+            }} className="flex flex-row items-center">
               <p className="text-green-500">Selesaikan</p>
               <div className="w-6 h-6 text-green-500">
                 <Arrow />

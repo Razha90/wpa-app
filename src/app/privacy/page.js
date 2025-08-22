@@ -2,15 +2,21 @@
 
 import { useRouter } from "next/navigation";
 import Arrow from "../components/icons/arrow";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Home() {
   const route = useRouter();
+  const {play} = useClicked();
   const handleBack = () => {
+    play();
     route.back();
   };
   return (
     <div>
-      <div className="flex mt-5 ml-5" onClick={handleBack}>
+      <div className="flex mt-5 ml-5" onClick={() => {
+        play();
+        handleBack();
+      }}>
         <div className="bg-blue-500 rounded-xl flex flex-row items-center gap-x-1 py-1 pl-2 pr-4 hover:bg-white transition-all active:bg-white cursor-pointer border-2 border-blue-500 group">
           <div className="w-6 h-6 rotate-180 group-active:text-blue-500 group-hover:text-blue-500">
             <Arrow />

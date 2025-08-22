@@ -4,14 +4,18 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Home from "./components/icons/home";
 import Refresh from "./components/icons/refresh";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function NotFound() {
   const router = useRouter();
+  const { play } = useClicked();
   const handleBackHome = () => {
+    play();
     router.push("/");
   };
 
   const handleRefresh = () => {
+    play();
     router.refresh();
   }
 

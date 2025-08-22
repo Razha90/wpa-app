@@ -1,6 +1,7 @@
 "use client";
 
 import FooterProfile from "@/app/components/footer_profile";
+import { useClicked } from "@/lib/clicked_context";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,7 +9,9 @@ export default function Client({ auth }) {
   const [name, setName] = useState(auth?.user?.fullname || "");
 
   const route = useRouter();
+  const { play } = useClicked();
   const handleBack = () => {
+    play();
     route.back();
   };
   return (

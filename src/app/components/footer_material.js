@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Arrow from "./icons/arrow";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function FooterMaterial({ current, before, after, id }) {
+  const { play } = useClicked();
   return (
     <footer
       style={{ boxShadow: "0 2px 6px 2px rgba(0,0,0,0.1)" }}
@@ -11,6 +13,7 @@ export default function FooterMaterial({ current, before, after, id }) {
         <div className="container mx-auto flex flex-row px-2 items-center justify-between py-3">
           {before ? (
             <Link
+              onClick={play}
               href={`/material/${id}/${before}`}
               className="flex flex-row items-center"
             >
@@ -24,6 +27,7 @@ export default function FooterMaterial({ current, before, after, id }) {
           )}
           {after ? (
             <Link
+              onClick={play}
               href={`/material/${id}/${after}`}
               className="flex flex-row items-center"
             >
@@ -37,6 +41,7 @@ export default function FooterMaterial({ current, before, after, id }) {
           )}
           {current && !after && before && (
             <Link
+              onClick={play}
               href={`/finish/material/${id}`}
               className="flex flex-row items-center"
             >
@@ -46,7 +51,6 @@ export default function FooterMaterial({ current, before, after, id }) {
               </div>
             </Link>
           )}
-  
         </div>
       }
     </footer>

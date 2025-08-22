@@ -1,7 +1,7 @@
 import Info from "./icons/info";
 import Close2 from "./icons/close2";
 import { useCallback, useEffect } from "react";
-import Link from "next/link";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function AlertSucess({
   message = "Something went wrong. Please try again.",
@@ -10,7 +10,9 @@ export default function AlertSucess({
   // const handleClosed = () => {
   //   closed?.();
   // };
+  const { play } = useClicked();
   const handleClosed = useCallback(() => {
+    play();
     closed?.();
   }, [closed]);
 

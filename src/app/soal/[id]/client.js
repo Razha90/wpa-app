@@ -10,9 +10,9 @@ import { BlackScreen } from "@/app/components/black_screen";
 import Refresh from "@/app/components/refresh";
 import Image from "next/image";
 import Arrow from "@/app/components/icons/arrow";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Client({ data, userId }) {
-  const route = useRouter;
   const [myData, setMyData] = useState(data || []);
   const [soal, setSoal] = useState({});
   const [answer, setAnswer] = useState([]);
@@ -30,11 +30,13 @@ export default function Client({ data, userId }) {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const {play} = useClicked();
 
   const page = searchParams.get("page");
 
   useEffect(() => {
     if (!page || page == 0) {
+
       router.replace(`?page=0`);
       return;
     }
@@ -125,6 +127,7 @@ export default function Client({ data, userId }) {
   };
 
   const handleBackHome = () => {
+    play();
     router.push("/");
   };
   return (
@@ -327,6 +330,7 @@ export default function Client({ data, userId }) {
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
               onClick={() => {
+                play();
                 router.push("/");
               }}
             >

@@ -1,14 +1,17 @@
+import { useClicked } from "@/lib/clicked_context";
 import Colors from "@/lib/colors";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function LinkLogin() {
   const pathname = usePathname();
+  const { play } = useClicked();
   return (
     <div
       className={`mt-10 flex flex-row items-center justify-center gap-x-7 font-bold ${Colors.font.default} text-2xl animate-fade-down animate-delay-200`}
     >
       <Link
+        onClick={play}
         href={`/login`}
         className={`transition-colors ${Colors.text.blueDark} ${
           pathname === "/login"
@@ -19,6 +22,7 @@ export default function LinkLogin() {
         Masuk
       </Link>
       <Link
+        onClick={play}
         href={`/register`}
         className={`transition-colors ${Colors.text.blueDark} ${
           pathname === "/register"

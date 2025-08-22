@@ -4,12 +4,14 @@ import FooterMaterial from "@/app/components/footer_material";
 import HeaderMaterial from "@/app/components/header_material";
 import Arrow from "@/app/components/icons/arrow";
 import MenuNav from "@/app/components/menu_nav";
+import { useClicked } from "@/lib/clicked_context";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Client({ data, id }) {
   const route = useRouter();
+  const {play} = useClicked();
   const [menu, setMenu] = useState(false);
   const toggleMenu = () => {
     setMenu(!menu);
@@ -19,6 +21,7 @@ export default function Client({ data, id }) {
   };
 
   const handleBackHome = () => {
+    play();
     route.push("/");
   };
 

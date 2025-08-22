@@ -1,12 +1,16 @@
 import Colors from "@/lib/colors";
 import Close from "../components/icons/close";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Logout({ clickedYes, clickedNo }) {
+  const { play } = useClicked();
   const handleClickYes = () => {
+    play();
     clickedYes?.();
   };
 
   const handleClickNo = () => {
+  play();
     clickedNo?.();
   };
 

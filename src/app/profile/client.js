@@ -12,14 +12,20 @@ import Logout from "./logout";
 import { signOut } from "next-auth/react";
 import ListArrowLink from "../components/reusable/list_arrow_link";
 import { useRouter } from "next/navigation";
+import { useClicked } from "@/lib/clicked_context";
+import AlertSucess from "../components/alert_sucess";
 
 export function Client({ auth }) {
   // const [profile, setProfile] = useState(false);
   const [background, setBackground] = useState(false);
   const [editImage, setEditImage] = useState(false);
   const [logout, setLogout] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(auth?.user?.role == "ADMIN");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
   const route = useRouter();
+  const { play } = useClicked();
 
   const handleEditImageProfile = () => {
     setBackground(!background);
@@ -42,25 +48,49 @@ export function Client({ auth }) {
   };
 
   const handleEdit = () => {
+    play();
     route.push("/profile/edit");
   };
 
   const handlePrivacy = () => {
+    play();
     route.push("/privacy");
   };
 
   const handleInfo = () => {
+    play();
     route.push("/info");
   };
 
   const handleSetting = () => {
+    play();
     route.push("/settings");
+  };
+
+  const closedEditImage = () => {
+    setEditImage(false);
+    setBackground(false);
+  };
+
+  const showSuccess = (message) => {
+    setSuccess(message);
+    setTimeout(() => {
+      setSuccess("");
+    }, 3000);
+  };
+
+  const showError = (message) => {
+    setError(message);
+    setTimeout(() => {
+      setError("");
+    }, 3000);
   };
 
   return (
     <div className="min-h-screen flex flex-col relative">
       <div className="bg-[url('/background.png')] bg-cover bg-center w-dvw h-dvh fixed -z-10"></div>
-
+      {success && <AlertSucess message={success} />}
+      {error && <AlertSucess message={error} />}
       <div
         className="flex items-start justify-start py-4 px-4 container mx-auto"
         style={{ boxShadow: "0 -4px 6px -1px rgba(0,0,0,0.1)" }}
@@ -68,11 +98,20 @@ export function Client({ auth }) {
         <h1 className={`font-bold text-3xl ${Colors.text.default}`}>Akun</h1>
       </div>
 
-      <MenuProfile clicked={handleEditImageProfile} name={auth.user.fullname} />
+      <MenuProfile
+        clicked={handleEditImageProfile}
+        name={auth.user?.fullname}
+        image={auth.user?.image}
+      />
       {background && <BlackScreen clicked={handleBlackScreen} />}
       {editImage && (
         <>
-          <EditImageChoose />
+          <EditImageChoose
+            closed={closedEditImage}
+            isSucess={showSuccess}
+            isError={showError}
+            image={auth.user?.image}
+          />
         </>
       )}
 

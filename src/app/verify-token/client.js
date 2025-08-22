@@ -12,6 +12,7 @@ import CooldownTimer from "../components/cooldown_timer";
 import { signOut, useSession } from "next-auth/react";
 import CompleteVerification from "../components/complete_verification";
 import { useRouter } from "next/navigation";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Client({ user }) {
   const [expired, setExpired] = useState(false);
@@ -23,6 +24,7 @@ export default function Client({ user }) {
   const [wrongPin, setWrongPin] = useState(false);
   const route = useRouter();
   const { update } = useSession();
+  const { play } = useClicked();
   const refreshSession = async () => {
     await update({ updated: true });
   };
@@ -67,6 +69,7 @@ export default function Client({ user }) {
   }, [checkTokenExpiration]);
 
   const makeTokenAgain = async () => {
+    play();
     if (!expired) return;
     setLoading(false);
     try {
@@ -126,7 +129,6 @@ export default function Client({ user }) {
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !e.target.value && index > 0) {
       inputRefs.current[index - 1].current.focus();
-
     }
   };
 
@@ -299,7 +301,10 @@ export default function Client({ user }) {
                 Tidak bisa masuk, ingin coba{" "}
                 <span
                   className={`${Colors.text.danger} cursor-pointer hover:opacity-50 active:opacity-55 transition-all`}
-                  onClick={signOut}
+                  onClick={() => {
+                    play();
+                    signOut();
+                  }}
                 >
                   Keluar
                 </span>

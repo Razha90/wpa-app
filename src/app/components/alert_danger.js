@@ -2,6 +2,7 @@ import Info from "./icons/info";
 import Close2 from "./icons/close2";
 import { useCallback, useEffect } from "react";
 import Link from "next/link";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function AlertDanger({
   message = "Something went wrong. Please try again.",
@@ -10,7 +11,9 @@ export default function AlertDanger({
   // const handleClosed = () => {
   //   closed?.();
   // };
+  const {play} = useClicked();
   const handleClosed = useCallback(() => {
+    play();
     closed?.();
   }, [closed]);
 
@@ -31,7 +34,16 @@ export default function AlertDanger({
         <div className="shrink-0 w-4 h-4">
           <Info />
         </div>
-        <div className="ms-3 text-sm font-medium">{message}, <Link className="transition-all hover:text-blue-600 cursor-pointer text-red-600 font-bold" href={`/contact`}>Coba Hubungi admin.</Link></div>
+        <div className="ms-3 text-sm font-medium">
+          {message},{" "}
+          <Link
+           onClick={play}
+            className="transition-all hover:text-blue-600 cursor-pointer text-red-600 font-bold"
+            href={`/contact`}
+          >
+            Coba Hubungi admin.
+          </Link>
+        </div>
         <button
           type="button"
           className="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8"

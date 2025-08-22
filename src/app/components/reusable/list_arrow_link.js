@@ -1,3 +1,4 @@
+import { useClicked } from "@/lib/clicked_context";
 import Colors from "@/lib/colors";
 import Link from "next/link";
 
@@ -17,7 +18,9 @@ export default function ListArrowLink({
   clickedBorder = Colors.active.borderBlue,
   href = "#",
 }) {
+  const {play} = useClicked();
   const handleClick = () => {
+    play();
     clicked?.();
   };
   return (

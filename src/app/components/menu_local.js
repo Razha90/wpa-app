@@ -1,9 +1,11 @@
 import Close from "./icons/close";
 import Arrow from "./icons/arrow";
-import Thumb from "./icons/thumb";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function MenuLocal({ closedMenu, list, changePage, page }) {
+  const {play} = useClicked();
   const handleClose = () => {
+    play();
     closedMenu?.();
   };
   // console.log("MenuNav Rendered", { list, id, current });
@@ -23,7 +25,10 @@ export default function MenuLocal({ closedMenu, list, changePage, page }) {
           {list?.map((item, index) => (
             <li key={`${item.id}-${index}`} className="text-sm font-semibold">
               <div
-                className={`text-base flex flex-row items-center justify-between rounded-xl p-2 hover:bg-gray-100 active:bg-gray-100 text-blue-500 ${item.choose ? "text-blue-500" : "text-gray-400"}`} onClick={() => changePage(index+1)}
+                className={`text-base flex flex-row items-center justify-between rounded-xl p-2 hover:bg-gray-100 active:bg-gray-100 text-blue-500 ${item.choose ? "text-blue-500" : "text-gray-400"}`} onClick={() => {
+                  play();
+                  changePage(index+1)
+                }}
               >
                 <p className="line-clamp-1">{item.title}</p>
                 <div className="w-5 h-5">

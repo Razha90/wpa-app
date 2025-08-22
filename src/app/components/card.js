@@ -1,13 +1,16 @@
 import Colors from "@/lib/colors";
 import Exclamation from "./icons/exclamation";
 import Link from "next/link";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Card({
   title = "Judul Card",
   type = "UNDEFINED",
   id = "0",
   progress = 0,
+  vr = '',
 }) {
+  const { play } = useClicked();
   return (
     <div
       className={`p-3 rounded-xl ${
@@ -53,17 +56,27 @@ export default function Card({
           } font-bold`}
         ></div>
         <div className="flex flex-row justify-between items-start">
-          <p
+          {/* <p
             className={`inline-block py-1 px-2 text-sm ${Colors.background.blueDark} ${Colors.text.white} rounded-lg`}
           >
             {type}
-          </p>
+          </p> */}
           <Link
+            onClick={play}
             href={type == "MATERI" ? `/material/${id}` : `/soal/${id}`}
-            className={`${Colors.background.green} rounded-md text-base py-1 px-4 active:bg-white active:text-green-500 transition-all hover:bg-white border-2 border-green-500 active:border-green-500  hover:text-green-500 hover:border-green-500 font-bold`}
+            className={`${Colors.background.blueDark} rounded-md text-base py-1 px-4 active:bg-white active:text-blue-500 transition-all hover:bg-white border-2 border-blue-500 active:border-blue-500  hover:text-blue-500 hover:border-blue-500 font-bold`}
           >
-            Mulai
+            {type}
           </Link>
+          {vr ? (
+            <Link
+            onClick={play}
+              href={`/material/${id}/${vr+1}#vr`}
+              className={`${Colors.background.green} rounded-md text-base py-1 px-4 active:bg-white active:text-green-500 transition-all hover:bg-white border-2 border-green-500 active:border-green-500  hover:text-green-500 hover:border-green-500 font-bold`}
+            >
+              AR
+            </Link>
+          ) : ("")}
         </div>
       </div>
     </div>

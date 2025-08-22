@@ -6,6 +6,7 @@ import AlertDanger from "@/app/components/alert_danger";
 import AlertSucess from "@/app/components/alert_sucess";
 import HeaderAdmin from "@/app/components/header-admin";
 import { updateKoleksi } from "./action";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Client({ data }) {
   const [dataFinal, setDataFinal] = useState(data);
@@ -20,7 +21,9 @@ export default function Client({ data }) {
   const [description, setDescription] = useState(data?.description || "");
   const [hasChanged, setHasChanged] = useState(false);
   const router = useRouter();
+  const { play } = useClicked();
   const back = () => {
+    play();
     router.push("/admin");
   };
   const handleCloseDanger = () => {

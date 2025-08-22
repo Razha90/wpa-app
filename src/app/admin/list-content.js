@@ -13,8 +13,10 @@ import {
 import Link from "next/link";
 import AlertSucess from "../components/alert_sucess";
 import AlertDanger from "../components/alert_danger";
+import { useClicked } from "@/lib/clicked_context";
 
 export default function ListContent({ data }) {
+  const {play} = useClicked();
   const [collections, setCollections] = useState(data || []);
   const [alertSucess, setAlertSucess] = useState("");
   const [alertError, setAlertError] = useState("");
@@ -229,12 +231,14 @@ export default function ListContent({ data }) {
                   </button>
                 </form>
                 <Link
+                onClick={play}
                   className="rounded-lg bg-yellow-400 text-white font-bold px-2 py-1"
                   href={`/admin/edit/${item.id}`}
                 >
                   Ubah
                 </Link>
                 <Link
+                 onClick={play}
                   className="rounded-lg bg-blue-400 text-white font-bold px-2 py-1"
                   href={
                     item.type == "MATERI"

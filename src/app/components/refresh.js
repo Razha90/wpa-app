@@ -3,16 +3,20 @@
 import { useRouter } from "next/navigation";
 import Colors from "@/lib/colors";
 import { signOut } from "next-auth/react"
+import { useClicked } from "@/lib/clicked_context";
 
 export default function Refresh({
   message = "Terjadi Kesalahan, Silakan Coba Lagi atau hubungi admin.",
 }) {
   const router = useRouter();
+  const {play} = useClicked();
   const handleRetry = () => {
+    play();
     window.location.reload();
   };
 
   const handleContactAdmin = () => {
+    play();
     router.push("/contact");
   };
 
@@ -42,7 +46,10 @@ export default function Refresh({
             </button>
           </div>
           <button
-            onClick={() => signOut()}
+            onClick={() => {
+              play();
+              signOut();
+            }}
             type="button"
             className="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
           >
